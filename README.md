@@ -10,7 +10,7 @@
 - **Hibernate**
 - **Swagger (OpenAPI)**
 - **Docker**
-- **PostgreSQL (или другая реляционная БД)**
+- **PostgreSQL**
 - **MapStruct** — для маппинга DTO и сущностей
 - **Lombok** — для упрощения кода, уменьшения boilerplate-кода
 
