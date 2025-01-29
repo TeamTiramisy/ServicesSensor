@@ -4,7 +4,7 @@
 
 ## Стек технологий
 
-- **Java 11-21**
+- **Java 17**
 - **Spring Boot**
 - **Spring Security**
 - **Hibernate**
