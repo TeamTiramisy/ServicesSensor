@@ -1,0 +1,24 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: StatisticService
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/statistic
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    properties.hibernate:
+      show_sql: true
+      format_sql: true
+      hbm2ddl.auto: validate
+    open-in-view: false
+
+sensors:
+  username: admin@mail.ru
+  password: 123
+  url: http://localhost:8080/v1/sensors
