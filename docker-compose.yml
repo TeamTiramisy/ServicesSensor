@@ -1,0 +1,43 @@
+services:
+
+  monitor-sensors:
+    build:
+      context: MonitorSensors
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/monitor_sensors
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14.4
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: monitor_sensors
+
+  statistic-service:
+    build:
+      context: StatisticService
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_stats:5432/statistic
+      SENSORS_URL: http://monitor-sensors:8080/v1/sensors
+    ports:
+      - 8888:8888
+    depends_on:
+      - postgres_stats
+      - monitor-sensors
+
+  postgres_stats:
+    image: postgres:14.4
+    ports:
+      - 5433:5433
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: statistic

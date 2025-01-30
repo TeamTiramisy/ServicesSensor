@@ -2,6 +2,8 @@ package by.agsr.statisticservice.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,4 +18,5 @@ public class SensorDto {
     private String unit;
     private String location;
     private String description;
+    private LocalDate createDate;
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,27 +49,41 @@ public class StatisticServiceImpl implements StatisticService {
     @Transactional
     @Scheduled(cron = "0 0 2 * * ?")
     public void save() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth(username, password);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        List<SensorDto> body = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<List<SensorDto>>() {
-                }
-        ).getBody();
+        List<SensorDto> sensors = getSensors();
 
         statisticRepository.deleteAll();
 
-        Map<String, Integer> data = body.stream()
+        Map<String, Integer> data = sensors.stream()
                 .collect(Collectors.groupingBy(SensorDto::getType,
                         Collectors.collectingAndThen(Collectors.counting(), Long::intValue)));
 
         Statistic statistic = new Statistic(null, data);
 
         statisticRepository.save(statistic);
+    }
+
+    @Override
+    public StatisticDto getSensorsByDateRange(LocalDate from, LocalDate to) {
+        Map<String, Integer> data = getSensors().stream()
+                .filter(sensor -> !sensor.getCreateDate().isBefore(from) && !sensor.getCreateDate().isAfter(to))
+                .collect(Collectors.groupingBy(SensorDto::getType,
+                        Collectors.collectingAndThen(Collectors.counting(), Long::intValue)));
+
+        return new StatisticDto(data);
+    }
+
+    private List<SensorDto> getSensors() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth(username, password);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<List<SensorDto>>() {
+                }
+        ).getBody();
     }
 }

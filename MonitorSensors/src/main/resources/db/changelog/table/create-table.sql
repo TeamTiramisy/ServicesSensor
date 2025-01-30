@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS sensor
     type_id     INT REFERENCES type (id) NOT NULL,
     unit_id     INT REFERENCES unit (id),
     location    VARCHAR(40),
-    description VARCHAR(200)
+    description VARCHAR(200),
+    create_date DATE                     NOT NULL
 );
 
 --changeset rniyazov:4

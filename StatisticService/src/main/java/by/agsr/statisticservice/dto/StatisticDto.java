@@ -1,14 +1,14 @@
 package by.agsr.statisticservice.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import java.util.Map;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class StatisticDto {
 
-    Integer id;
-    Map<String, Integer> data;
+    private Map<String, Integer> data;
 }
